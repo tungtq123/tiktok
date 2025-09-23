@@ -10,21 +10,36 @@ import { useEffect, useState } from "react"
 //----------
 // 1. Callback luon duoc goi sau khi component mounted
 // 2. Cleanup function luon duoc goi khi component unmounted
+// 3. Cleanup function luon duoc goi truoc khi callback duoc goi (tru lan mounted)
 
 function Content () {
-    const [countdown, setCountdown] = useState(180)
+    const [avatar, setAvatar] = useState()
 
     useEffect(() => {
-        const timerId =  setInterval(() => {
-            setCountdown(prevState => prevState - 1)
-        }, 1000)
+        // Cleanup func
+        return () => {
+            avatar && URL.revokeObjectURL(avatar.preview)
+        }
 
-        return () => clearInterval(timerId)
-    }, [])
+    }, [avatar])
 
-    return(
+    const handlePreviewAvatar = (e) => {
+        const file = e.target.files[0]
+
+        file.preview = URL.createObjectURL(file)
+        
+        setAvatar(file)
+    }
+
+    return (
         <div>
-            <h1>{countdown}</h1>
+            <input 
+                type="file"
+                onChange={handlePreviewAvatar}
+            />
+            {avatar && (
+                <img src={avatar.preview} alt="" width="80%"/>
+            )}
         </div>
     )
 }

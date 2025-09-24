@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useLayoutEffect, useEffect ,useState } from "react"
 // 1. useEffect(callback)
 // - Goi callback moi khi component re-render
 // - Goi callback sau khi component them element vao dom
@@ -12,56 +12,23 @@ import { useEffect, useState } from "react"
 // 2. Cleanup function luon duoc goi khi component unmounted
 // 3. Cleanup function luon duoc goi truoc khi callback duoc goi (tru lan mounted)
 
-const lessons = [
-    {
-        id: 1,
-        name: 'ReactJS là gì? Tại sao nên học ReactJS?'
-    },
-    {
-        id: 2,
-        name: 'SPA/MPA là gì?'
-    },
-    {
-        id: 3,
-        name: 'Arrow function'
-    }
-]
-
 function Content () {
-    const [lessonId, setLessonId] = useState(1)
+    const [count, setCount] = useState(0)
 
-    useEffect(() => {
-
-        const handleComment = (e) => {
-            console.log(e);
+    useLayoutEffect(() => {
+        if(count > 3) {
+            setCount(0)
         }
+    }, [count])
 
-        window.addEventListener(`lesson-${lessonId}`, handleComment)
-    
-        // Cleanup func
-        return () => {
-            window.removeEventListener(`lesson-${lessonId}`, handleComment)
-        }
-    }, [lessonId])
+    const handleRun = () => {
+        setCount(count + 1)
+    }
 
     return (
         <div>
-            <ul>
-                {lessons.map(lesson => (
-                    <li
-                        key={lesson.id}
-                        style={{
-                            color: lessonId === lesson.id ? 
-                                'red' :
-                                '#333',
-                            cursor: 'pointer'
-                        }}
-                        onClick={() => setLessonId(lesson.id)}
-                    >
-                        {lesson.name}
-                    </li>
-                ))}
-            </ul>
+            <h1>{count}</h1>
+            <button onClick={handleRun}>Run</button>
         </div>
     )
 }

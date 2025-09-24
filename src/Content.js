@@ -1,4 +1,4 @@
-import { useLayoutEffect, useEffect ,useState } from "react"
+import { useRef,useState } from "react"
 // 1. useEffect(callback)
 // - Goi callback moi khi component re-render
 // - Goi callback sau khi component them element vao dom

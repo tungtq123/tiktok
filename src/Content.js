@@ -12,34 +12,56 @@ import { useEffect, useState } from "react"
 // 2. Cleanup function luon duoc goi khi component unmounted
 // 3. Cleanup function luon duoc goi truoc khi callback duoc goi (tru lan mounted)
 
+const lessons = [
+    {
+        id: 1,
+        name: 'ReactJS là gì? Tại sao nên học ReactJS?'
+    },
+    {
+        id: 2,
+        name: 'SPA/MPA là gì?'
+    },
+    {
+        id: 3,
+        name: 'Arrow function'
+    }
+]
+
 function Content () {
-    const [avatar, setAvatar] = useState()
+    const [lessonId, setLessonId] = useState(1)
 
     useEffect(() => {
-        // Cleanup func
-        return () => {
-            avatar && URL.revokeObjectURL(avatar.preview)
+
+        const handleComment = (e) => {
+            console.log(e);
         }
 
-    }, [avatar])
-
-    const handlePreviewAvatar = (e) => {
-        const file = e.target.files[0]
-
-        file.preview = URL.createObjectURL(file)
-        
-        setAvatar(file)
-    }
+        window.addEventListener(`lesson-${lessonId}`, handleComment)
+    
+        // Cleanup func
+        return () => {
+            window.removeEventListener(`lesson-${lessonId}`, handleComment)
+        }
+    }, [lessonId])
 
     return (
         <div>
-            <input 
-                type="file"
-                onChange={handlePreviewAvatar}
-            />
-            {avatar && (
-                <img src={avatar.preview} alt="" width="80%"/>
-            )}
+            <ul>
+                {lessons.map(lesson => (
+                    <li
+                        key={lesson.id}
+                        style={{
+                            color: lessonId === lesson.id ? 
+                                'red' :
+                                '#333',
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => setLessonId(lesson.id)}
+                    >
+                        {lesson.name}
+                    </li>
+                ))}
+            </ul>
         </div>
     )
 }

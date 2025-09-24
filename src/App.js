@@ -1,45 +1,32 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import Content from './Content'
 
-// luu cac gia tri qua mot tham chieu o ben ngoai
-// function component
+// 1. memo() -> Higher Order Component (HOC)
+// 2. useCallback()
+
+// Hooks
+// HOC
+// Render props
 
 function App() {
-  const [count, setCount] = useState(60)
+  const [count, setCount] = useState(0)
+  const [count2, setCount2] = useState(0)
 
-  const timerId = useRef()
-  const prevCount = useRef()
-  const h1Ref = useRef()
-
-  useEffect(() => {
-    prevCount.current = count
-  }, [count])
-
-  useEffect(() => {
-    console.log(h1Ref.current);
-    
-  })
-
-  const handleStart = () => {
-    timerId.current = setInterval(() => {
-      setCount(prevCount => prevCount - 1)
-    }, 1000)
-
-    console.log('Start -> ', timerId);
+  const increase = () => {
+    setCount(count + 1)
   }
 
-  const handleStop = () => {
-    clearInterval(timerId.current)
-
-    console.log('Stop -> ', timerId);
+  const increase2 = () => {
+    setCount2(count2 + 1)
   }
-
-  console.log(count, prevCount.current);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1 ref={h1Ref}>{count}</h1>
-      <button onClick={handleStart}>Start</button>
-      <button onClick={handleStop}>Stop</button>
+    <div style={{ padding: '10px 32px' }}>
+      <Content count={count} />
+      <h1>{count}</h1>
+      <h1>{count2}</h1>
+      <button onClick={increase}>Click me!</button>
+      <button onClick={increase2}>Click me 2!</button>
     </div>
   )
 }
